@@ -1,0 +1,92 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>kr.or.ddit</groupId>
+	<artifactId>boardTest</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>mytest</name>
+	<properties>  <!--윗줄 하나 바꾸면 아래의 properties가 전부 한번에 바뀌도록 ex,전역변수처럼 -->
+		<java.version>1.7</java.version>
+	</properties>
+	<!-- 프로젝트 우클릭 -> 프로퍼티스 -> 프로젝트 facets ->우측 Runtime -> 아파치 체크해주기 -->
+	<!-- 하단의 서버 우클릭 -> add~~~ -> jsp 우측으로 추가해주기 -->
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<!-- ojdbc6 설정시 -->
+		<repository>
+			<id>codelds</id>
+			<url>https://code.lds.org/nexus/content/groups/main-repo</url>
+		</repository>
+	</repositories>
+
+
+	<!-- https://mvnrepository.com/artifact/junit/junit -->
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- ojdbc -->
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>12.1.0.2</version>
+			<scope>provided</scope>
+			<!-- <version>11.2.0.3</version> -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.4.6</version><!--scope가 없다는것은 기본적으로 배포가 될때 포함이 되어서 나간다는 뜻이다 -->
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+		<!-- 톰캣이 실행될때 lib폴더에서 제공을 해준다. 컴파일 할때만 필요한 거고 배포할때는 필요가 없다 . maven이 provide때문에 
+			안해준다. -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope><!-- 실행될때 제공된다. -->
+		</dependency>
+	</dependencies>
+	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->
+
+
+
+
+</project>

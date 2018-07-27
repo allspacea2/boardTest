@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<!-- 학생 id로 그가 만든 게시판Vo 가져오기 -->
+	<select id="getBoardByStudentID" parameterType="int" resultType="boardVo">
+		select * from board where std_num = #{std_num}
+	</select>
+	
+	
+	<!-- 전체 게시판 정보 가져오는 쿼리 -->
+	<select id="getAllBoard" resultType="boardVo">
+		select * from board order by board_no
+	</select>
+	
+	<!-- 사용가능한 게시판만 가져오는 쿼리 -->
+	<select id="getAvaBoard" resultType="boardVo">
+		select * from board where board_ava = 'y' order by board_no
+	</select>
+	
+	<!-- 새로운 게시판 생성 쿼리 -->
+	<insert id="setBoardInsert" parameterType="boardVo">
+		insert into board (
+			board_no
+		   ,std_num 
+		   ,board_name 
+		   ,board_ava  
+		   ,board_writer 
+		   ,board_date
+		)
+		values(
+			board_seq.nextval
+			,#{std_num}
+			,#{board_name}
+			,#{board_ava}
+			,#{board_writer}
+			,sysdate
+		)
+	</insert>
+	
+	<!-- board_no로 하나의 게시판 수정쿼리 -->
+	<update id="oneBoardUpdate" parameterType="BoardVo" >
+		update board set 
+			 board_no 		= #{board_no}
+			,std_num 		= #{std_num}
+			,board_name 	= #{board_name}
+			,board_ava 		= #{board_ava}
+			,board_writer	= #{board_writer}
+			
+		where board_no	= #{board_no}
+	</update>
+	
+	
+	<!-- board_no로 board_name을 불러온다.  -->
+	<select id="getBoardName" parameterType="int" resultType="string">
+	
+		select board_name from board where board_no = #{board_no}
+	
+	</select>
+	
+	
+	
+</mapper>

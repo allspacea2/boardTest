@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rep">
+
+	<!-- 게시물 번호로 답글Vo 가져오기 -->
+	<select id="getRepByPost_no" parameterType="int" resultType="repVo">
+		select * from reply where post_no = #{post_no} order by rep_no
+	</select>
+
+	<!-- insert. 답글 입력 넣었을때. -->
+	<insert id="insertRep" parameterType="repVo">
+		insert into reply(
+		rep_no,
+		post_no,
+		rep_writer,
+		rep_date,
+		rep_contents,
+		std_num)
+		
+		
+		values(
+		rep_seq.nextval,
+		#{post_no},
+		#{rep_writer},
+		sysdate,
+		#{rep_contents},
+		#{std_num})
+	</insert>
+
+
+</mapper>

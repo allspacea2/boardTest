@@ -1,0 +1,5 @@
+@CHARSET "UTF-8";
+
+table tbody tr:hover{
+	cursor:pointer;
+}

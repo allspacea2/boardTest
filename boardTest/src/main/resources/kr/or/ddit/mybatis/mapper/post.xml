@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+
+	<select id="getAllPostList" resultType="postVo" parameterType="int">
+		select post_no, lpad(' ', level*4, ' ') || title as title, (select name from student where std_num = p.std_num) as std_name ,post_ava, post_pno, post_gno, board_no, std_num, post_date, post_contents
+		from post p	where board_no = #{board_no}															
+		START WITH post_pno is null  											
+		connect by prior post_no = post_pno  									
+		order siblings by post_gno desc
+	</select>
+	
+	<select id="getPostByPost_no" resultType="postVo" parameterType="int">
+		select * from post where post_no = #{post_no}
+	
+	</select>
+	
+	<update id="postAvaUpdate" parameterType="int">
+		update post set post_ava='n' where post_no=#{post_no}
+	</update>
+	
+	<!-- post_no를 통해서 찾은 게시글의 제목과, 내용을 변경해주는 메서드 -->
+	<update id="postUpdate" parameterType="postVo" >
+		update post 
+		set 
+		title = #{title}, 
+		post_contents = #{post_contents} 
+		where post_no = #{post_no}
+		
+	
+	</update>
+	
+	<insert id="InsertPost" parameterType="postVo">
+		insert into post(
+			post_no,
+			board_no,
+			post_pno,
+			post_gno,
+			title,
+			post_date,
+			post_contents,
+			std_num,
+			post_ava
+			
+			) values(
+			  post_seq.nextval
+			, #{board_no}
+			, #{post_pno}
+			, #{post_gno}
+			, #{title}
+			, sysdate
+			, #{post_contents}
+			, #{std_num}
+			, #{post_ava}
+			
+			)
+	</insert>
+	<!-- 게시물 페이지네이션 -->
+	<select id="getPostPageList" resultType="postVo" parameterType="map">
+		SELECT * FROM	(SELECT A.*, ROWNUM RN
+	  				FROM 
+	  				(SELECT*FROM 
+	  					(select post_no, lpad(' ', level*4, ' ') || title as title, 
+	  						(select name from student where std_num = p.std_num) 
+	  					as std_name ,post_ava, post_pno, post_gno, board_no, std_num, post_date, post_contents
+		
+		from post p	where board_no = #{board_no}															
+		START WITH post_pno is null  											
+		connect by prior post_no = post_pno  									
+		order siblings by post_gno desc) order by post_gno desc) a)
+	  	WHERE rn BETWEEN (#{page}-1)*#{pageSize}+1 AND #{page}*#{pageSize}
+	</select>
+	
+	<!-- 전체 포스트 수 조회 -->
+	<select id="getPostTotCnt" resultType="int">
+		select count(*) from post
+	</select>
+	
+	<select id="getPostByBoardId" resultType="int" parameterType="int">
+		select count(*) from post where board_no = #{board_no}
+	</select>
+	
+	<insert id="InsertNewPost" parameterType="postVo" >
+		insert into post( post_no, board_no, post_gno, title, post_date, post_ava, post_contents, std_num) 
+			values(post_seq.nextval, #{board_no}, post_seq.nextval, #{title}, sysdate, #{post_ava}, #{post_contents}, #{std_num})
+			
+			
+	</insert>
+	
+	
+	<!-- board번호를 리스트를 다 가져오는데 그 중에 post의 std_num과 student의 std_num이 같을때 가져온다.  -->
+	<select id="getSelectPostByBoardNo" resultType="postVo" parameterType="int">
+	select p.*, (select name from student where std_num  = p.std_num) as std_name from post p where board_no = #{board_no}
+	</select>
+	
+	<select id="MaxPost_no" resultType="int">
+		SELECT max(post_no) FROM  post
+	</select>
+	
+</mapper>
+
+
